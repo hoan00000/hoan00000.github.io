@@ -5,20 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>固定式燃焼器接続不備周知文章生成ツール</title>
     <style>
-        body { font-family: sans-serif; background: #f0f2f5; margin: 0; padding: 10px; color: #333; 
-        /* 最下部に大きな余白を設定 */
-        padding-bottom: 80px; }
+        body { font-family: sans-serif; background: #f0f2f5; margin: 0; padding: 10px; color: #333; padding-bottom: 80px; }
         .card { background: white; border-radius: 12px; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 10px; }
         h2 { font-size: 16px; margin: -15px -15px 10px -15px; padding: 10px 15px; color: #ffeb3b; background: #212529; border-top-left-radius: 12px; border-top-right-radius: 12px; }
-        .subheader.bad { font-weight: bold; margin-top: 15px; color: #d9534f; font-size: 14px; background: #fff1f0; padding: 5px; }
-        .subheader.good { font-weight: bold; margin-top: 15px; color: #007bff; font-size: 14px; background: #e0f0ff; padding: 5px; }
+        .subheader { font-weight: bold; margin-top: 15px; font-size: 14px; padding: 5px; border-radius: 4px; }
+        .subheader.bad { color: #d9534f; background: #fff1f0; }
+        .subheader.good { color: #007bff; background: #e0f0ff; }
         label { display: block; font-size: 12px; font-weight: bold; margin-top: 10px; color: #666; }
         .input-group { display: flex; gap: 5px; margin-top: 3px; margin-bottom: 5px; }
         select { width: 100%; height: 35px; font-size: 14px; border: 1px solid #ccc; border-radius: 5px; min-width: 0; }
-        /* 自由入力欄があるグループの select の幅調整 */
         .input-group select.has-free { flex: 1.2; }
         .input-group input { flex: 1; height: 31px; font-size: 14px; border: 1px solid #007bff; border-radius: 5px; padding-left: 5px; min-width: 0; }
         .result-area { margin-top: 15px; padding: 10px; border-radius: 8px; font-size: 15px; border: 2px solid #007bff; background: #fff; line-height: 1.5; min-height: 100px; white-space: pre-wrap; word-wrap: break-word; }
+        .result-area.error { border-color: #d9534f; background: #fff1f0; color: #d9534f; font-weight: bold; }
         .copy-btn { width: 100%; background: #28a745; color: white; border: none; padding: 15px; border-radius: 8px; font-size: 18px; font-weight: bold; margin-top: 10px; cursor: pointer; }
     </style>
 </head>
@@ -29,7 +28,7 @@
 
     <label>対象の燃焼器</label>
     <div class="input-group">
-        <select id="device" onchange="generate()" oninput="generate()" class="has-free">
+        <select id="device" oninput="generate()" class="has-free">
             <option value="">（未選択）</option>
             <option value="固定式コンロ">固定式コンロ</option>
             <option value="屋外式給湯器">屋外式給湯器</option>
@@ -46,30 +45,56 @@
     <div class="subheader bad">現場の接続（不備）</div>
     <label>末端ガス栓</label>
     <div class="input-group">
-        <select id="bad_v" onchange="generate()" oninput="generate()" class="has-free"><option value="">（未選択）</option><option value="ねじガス栓">ねじガス栓</option><option value="可とう管ガス栓">可とう管ガス栓</option><option value="機器接続ガス栓">機器接続ガス栓</option><option value="ヒューズガス栓">ヒューズガス栓</option></select>
+        <select id="bad_v" oninput="generate()" class="has-free">
+            <option value="">（未選択）</option>
+            <option value="ねじガス栓">ねじガス栓</option>
+            <option value="可とう管ガス栓">可とう管ガス栓</option>
+            <option value="機器接続ガス栓">機器接続ガス栓</option>
+            <option value="ヒューズガス栓">ヒューズガス栓</option>
+        </select>
         <input type="text" id="bad_v_free" placeholder="フリーワード" oninput="generate()">
     </div>
     <label>接続管1</label>
     <div class="input-group">
-        <select id="bad_c1" onchange="generate()" oninput="generate()" class="has-free"><option value="">（未選択）</option><option value="金属フレキシブルホース">金属フレキシブルホース</option><option value="強化ガスホース">強化ガスホース</option><option value="配管用フレキ管">配管用フレキ管</option><option value="金属管">金属管</option><option value="ゴムホース">ゴムホース</option></select>
+        <select id="bad_c1" oninput="generate()" class="has-free">
+            <option value="">（未選択）</option>
+            <option value="金属フレキシブルホース">金属フレキシブルホース</option>
+            <option value="強化ガスホース">強化ガスホース</option>
+            <option value="配管用フレキ管">配管用フレキ管</option>
+            <option value="金属管">金属管</option>
+            <option value="ゴムホース">ゴムホース</option>
+        </select>
         <input type="text" id="bad_c1_free" placeholder="フリーワード" oninput="generate()">
     </div>
     <label>接続管2（任意）</label>
     <div class="input-group">
-        <select id="bad_c2" onchange="generate()" oninput="generate()" class="has-free"><option value="">（未選択）</option><option value="金属フレキシブルホース">金属フレキシブルホース</option><option value="強化ガスホース">強化ガスホース</option><option value="配管用フレキ管">配管用フレキ管</option><option value="金属管">金属管</option><option value="ゴムホース">ゴムホース</option></select>
+        <select id="bad_c2" oninput="generate()" class="has-free">
+            <option value="">（未選択）</option>
+            <option value="金属フレキシブルホース">金属フレキシブルホース</option>
+            <option value="強化ガスホース">強化ガスホース</option>
+            <option value="配管用フレキ管">配管用フレキ管</option>
+            <option value="金属管">金属管</option>
+            <option value="ゴムホース">ゴムホース</option>
+        </select>
         <input type="text" id="bad_c2_free" placeholder="フリーワード" oninput="generate()">
     </div>
     <label>接続管3（任意）</label>
     <div class="input-group">
-        <select id="bad_c3" onchange="generate()" oninput="generate()" class="has-free"><option value="">（未選択）</option><option value="金属フレキシブルホース">金属フレキシブルホース</option><option value="強化ガスホース">強化ガスホース</option><option value="配管用フレキ管">配管用フレキ管</option><option value="金属管">金属管</option><option value="ゴムホース">ゴムホース</option></select>
+        <select id="bad_c3" oninput="generate()" class="has-free">
+            <option value="">（未選択）</option>
+            <option value="金属フレキシブルホース">金属フレキシブルホース</option>
+            <option value="強化ガスホース">強化ガスホース</option>
+            <option value="配管用フレキ管">配管用フレキ管</option>
+            <option value="金属管">金属管</option>
+            <option value="ゴムホース">ゴムホース</option>
+        </select>
         <input type="text" id="bad_c3_free" placeholder="フリーワード" oninput="generate()">
     </div>
 
     <div class="subheader good">正しい接続</div>
     <label>末端ガス栓</label>
     <div class="input-group">
-        <!-- フリーワード入力欄を削除 -->
-        <select id="good_v" onchange="generate()" oninput="generate()">
+        <select id="good_v" oninput="generate()">
             <option value="">（未選択）</option>
             <option value="可とう管ガス栓">可とう管ガス栓</option>
             <option value="機器接続ガス栓">機器接続ガス栓</option>
@@ -78,8 +103,7 @@
     </div>
     <label>接続管</label>
     <div class="input-group">
-        <!-- フリーワード入力欄を削除 -->
-        <select id="good_c1" onchange="generate()" oninput="generate()">
+        <select id="good_c1" oninput="generate()">
             <option value="">（未選択）</option>
             <option value="金属フレキシブルホース">金属フレキシブルホース</option>
             <option value="強化ガスホース">強化ガスホース</option>
@@ -96,126 +120,108 @@
 <script>
 let hasError = false;
 
-// 現場側の値取得ヘルパー関数（フリーワード優先）
 function getValue(selectId, freeId) {
-    const freeInput = document.getElementById(freeId);
-    const selectElement = document.getElementById(selectId);
-    if (!freeInput || !selectElement) return "";
-    const freeVal = freeInput.value.trim();
-    const selectVal = selectElement.value;
-    if (freeVal !== "") return freeVal;
-    if (selectVal === "") return "";
-    return selectVal;
+    const freeVal = document.getElementById(freeId).value.trim();
+    return freeVal !== "" ? freeVal : document.getElementById(selectId).value;
 }
 
-// 正しい接続側の値取得ヘルパー関数（フリーワード無し）
-function getGoodValue(selectId) {
-    const selectElement = document.getElementById(selectId);
-    if (!selectElement) return "";
-    const selectVal = selectElement.value;
-    if (selectVal === "") return "";
-    return selectVal;
-}
+// 厳格な組み合わせ判定
+function isCorrectConnection(valve, p1, p2, p3) {
+    if (valve === "") return false;
+    const pipes = [p1, p2, p3].filter(p => p !== "");
 
-// 組み合わせチェック機能 (ユーザー指定の厳格ルールに基づき更新)
-function validateConnection(valve, pipe1) {
-    // 末端ガス栓が未選択なのに、接続管が選択されていたら問答無用でエラー
-    if (valve === "" && pipe1 !== "") {
-        return false;
+    // 1. 機器接続ガス栓：管が0本なら正しい
+    if (valve === "機器接続ガス栓") {
+        return pipes.length === 0;
     }
-    
+
+    // 2. 可とう管ガス栓：管が1本かつ指定の種類なら正しい
+    if (valve === "可とう管ガス栓") {
+        if (pipes.length !== 1) return false;
+        return (p1 === "金属フレキシブルホース" || p1 === "強化ガスホース");
+    }
+
+    // 3. ねじガス栓：管が1本以上あり、すべて指定の種類なら正しい
     if (valve === "ねじガス栓") {
-        return pipe1 === "配管用フレキ管" || pipe1 === "金属管";
-    } else if (valve === "可とう管ガス栓") {
-        return pipe1 === "金属フレキシブルホース" || pipe1 === "強化ガスホース";
-    } else if (valve === "機器接続ガス栓") {
-        return pipe1 === ""; 
+        if (pipes.length === 0) return false; 
+        return pipes.every(p => p === "配管用フレキ管" || p === "金属管");
     }
-    
-    if (valve === "") return true;
 
+    // ヒューズガス栓などは常に不正
     return false;
 }
 
 function generate() {
     const resultDiv = document.getElementById('resultText');
-    if (!resultDiv) return;
-
     try {
         const device = getValue('device', 'device_free');
         if (!device) {
-            resultDiv.innerText = "ここに文章が生成されます。対象の燃焼器を選択/入力してください。";
-            hasError = false; // エラー表示はしない
+            resultDiv.innerText = "ここに文章が生成されます。";
+            resultDiv.classList.remove('error');
+            hasError = false;
             return;
         }
-        
+
         const bv = getValue('bad_v', 'bad_v_free');
         const bc1 = getValue('bad_c1', 'bad_c1_free');
         const bc2 = getValue('bad_c2', 'bad_c2_free');
         const bc3 = getValue('bad_c3', 'bad_c3_free');
-        let bad_parts = [bv, bc1, bc2, bc3].filter(v => v !== "");
-        let bad_path = bad_parts.join("→");
 
-        // 正しい接続の値を取得（フリーワード無し版ヘルパー使用）
-        const gv = getGoodValue('good_v');
-        const gc1 = getGoodValue('good_c1');
-        
-        // 正しい接続のバリデーションチェック
-        if (!validateConnection(gv, gc1)) {
-            resultDiv.innerText = `エラー:「${gv}」と「${gc1}」の組み合わせは、法令上認められていません。正しい接続方法を選択してください。`;
+        const gv = document.getElementById('good_v').value;
+        const gc1 = document.getElementById('good_c1').value;
+
+        // ★現場側が正しい組み合わせかチェック（ガス栓が選択されている場合）
+        if (bv !== "" && isCorrectConnection(bv, bc1, bc2, bc3)) {
+            resultDiv.innerText = `エラー：現場の接続状況「${bv}...」は法令等に基づいた正しい組み合わせになっています。周知文章は不要です。`;
+            resultDiv.classList.add('error');
             hasError = true;
             return;
         }
 
-        let good_parts = [gv, gc1].filter(v => v !== "");
-        let good_path = good_parts.join("→");
+        // 改善側チェック
+        if (gv !== "") {
+            if (!isCorrectConnection(gv, gc1, "", "")) {
+                resultDiv.innerText = `エラー：選択された「正しい接続」の組み合わせが正しくありません。`;
+                resultDiv.classList.add('error');
+                hasError = true;
+                return;
+            }
+        }
 
-        const text = `${device}へのガス接続が、【${bad_path}】となっています。【${good_path}】へ改善をお願いいたします。`;
-        resultDiv.innerText = text;
-        hasError = false; // 正常生成
+        // 必須入力チェック（現場側はガス栓さえあればOK、改善側は完成形が必要）
+        const isBadReady = (bv !== "");
+        const isGoodReady = (gv === "機器接続ガス栓") || (gv !== "" && gc1 !== "");
+
+        if (!isBadReady || !isGoodReady) {
+            resultDiv.innerText = "「現場の不備」と「正しい接続」を選択してください。";
+            resultDiv.classList.remove('error');
+            hasError = true;
+            return;
+        }
+
+        let bad_path = [bv, bc1, bc2, bc3].filter(v => v !== "").join("→");
+        let good_path = [gv, gc1].filter(v => v !== "").join("→");
+
+        resultDiv.innerText = `${device}へのガス接続が、【${bad_path}】となっています。【${good_path}】へ改善をお願いいたします。`;
+        resultDiv.classList.remove('error');
+        hasError = false;
+
     } catch (e) {
-        console.error("生成エラー:", e);
-        resultDiv.innerText = "エラーが発生しました: " + e.message;
+        resultDiv.innerText = "エラーが発生しました。";
         hasError = true;
     }
 }
 
 function copyToClipboard() {
-    if (hasError) {
-        alert("エラーメッセージが表示されているため、コピーできません。正しい組み合わせを選択してください。");
-        return;
-    }
-
-    const resultDiv = document.getElementById('resultText');
-    const textToCopy = resultDiv.innerText;
-    
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(textToCopy).then(() => {
-            alert("コピーしました！");
-        }).catch(err => {
-            fallbackCopy(textToCopy);
-        });
-    } else {
-        fallbackCopy(textToCopy);
-    }
-}
-
-function fallbackCopy(textToCopy) {
-    const tempTextArea = document.createElement('textarea');
-    tempTextArea.value = textToCopy;
-    document.body.appendChild(tempTextArea);
-    tempTextArea.select();
-    try {
-        document.execCommand('copy');
-        alert("コピーしました！");
-    } catch (err) {
-        alert("コピーに失敗しました。文章エリアを長押しして手動でコピーしてください。");
-    }
-    document.body.removeChild(tempTextArea);
+    if (hasError) { alert("内容を確認してください。"); return; }
+    const text = document.getElementById('resultText').innerText;
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    alert("コピーしました！");
 }
 
 window.onload = generate;
 </script>
-
 </body>
 </html>
