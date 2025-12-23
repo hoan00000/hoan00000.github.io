@@ -18,8 +18,11 @@
         select { width: 100%; height: 35px; font-size: 14px; border: 1px solid #ccc; border-radius: 5px; background-color: #fff; }
         .input-group select.has-free { flex: 1.2; }
         .input-group input { flex: 1; height: 31px; font-size: 14px; border: 1px solid #007bff; border-radius: 5px; padding-left: 5px; min-width: 0; }
-        .result-area { margin-top: 15px; padding: 12px; border-radius: 8px; font-size: 15px; border: 2px solid #007bff; background: #fff; line-height: 1.6; min-height: 80px; white-space: pre-wrap; word-wrap: break-word; }
+        
+        /* white-spaceをnormalに変更し、システム的な改行を無視するように修正 */
+        .result-area { margin-top: 15px; padding: 12px; border-radius: 8px; font-size: 15px; border: 2px solid #007bff; background: #fff; line-height: 1.6; min-height: 80px; white-space: normal; word-wrap: break-word; }
         .result-area.error { border-color: #d9534f; background: #fff1f0; color: #d9534f; font-weight: bold; }
+        
         .btn-container { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; padding: 0 10px; }
         .copy-btn { width: 100%; background: #28a745; color: white; border: none; padding: 15px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
         .add-btn { width: 100%; background: #6c757d; color: white; border: none; padding: 10px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; }
@@ -154,22 +157,22 @@ function getSentence(num) {
     const gc1 = document.getElementById('good_c1_' + num).value;
 
     if (bv !== "" && isCorrectConnection(bv, bc1, bc2, bc3)) {
-        return { text: `エラー：燃焼器${num}の現場接続は正しい組み合わせです。`, error: true };
+        return { text: "エラー：燃焼器" + num + "の現場接続は正しい組み合わせです。", error: true };
     }
     if (gv !== "" && !isCorrectConnection(gv, gc1, "", "")) {
-        return { text: `エラー：燃焼器${num}の改善案が正しくありません。`, error: true };
+        return { text: "エラー：燃焼器" + num + "の改善案が正しくありません。", error: true };
     }
     const isGoodReady = (gv === "機器接続ガス栓") || (gv !== "" && gc1 !== "");
     if (!bv || !isGoodReady) {
-        return { text: `燃焼器${num}の項目を選択してください。`, error: false, empty: true };
+        return { text: "燃焼器" + num + "の項目を選択してください。", error: false, empty: true };
     }
 
     let bad_path = [bv, bc1, bc2, bc3].filter(v => v !== "").join("→");
     let good_path = [gv, gc1].filter(v => v !== "").join("→");
     
-    // 「、」を削除し、隙間をなくした形式
+    // JSのテンプレートリテラル内の改行も排除
     return { 
-        text: `${device}へのガス接続が【${bad_path}】となっています。【${good_path}】へ改善をお願いいたします。`,
+        text: device + "へのガス接続が【" + bad_path + "】となっています。【" + good_path + "】へ改善をお願いいたします。",
         error: false, 
         empty: false 
     };
@@ -209,8 +212,8 @@ function generate() {
             resultDiv.classList.remove('error');
             hasError = true;
         } else {
-            // 改行せず①と②を繋げて表示
-            resultDiv.innerText = `①${res1.text}②${res2.text}`;
+            // 文字列を完全に密着させて結合
+            resultDiv.innerText = "①" + res1.text + "②" + res2.text;
             resultDiv.classList.remove('error');
             hasError = false;
         }
