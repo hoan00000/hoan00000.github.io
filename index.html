@@ -5,210 +5,215 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>固定式燃焼器接続不備周知文章生成ツール</title>
     <style>
-        body { font-family: sans-serif; background: #f0f2f5; margin: 0; padding: 10px; color: #333; padding-bottom: 80px; }
-        .card { background: white; border-radius: 12px; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 10px; }
-        h2 { font-size: 16px; margin: -15px -15px 10px -15px; padding: 10px 15px; color: #ffeb3b; background: #212529; border-top-left-radius: 12px; border-top-right-radius: 12px; }
-        .subheader { font-weight: bold; margin-top: 15px; font-size: 14px; padding: 5px; border-radius: 4px; }
+        body { font-family: sans-serif; background: #f0f2f5; margin: 0; padding: 0; color: #333; padding-bottom: 80px; }
+        .main-title { background: #212529; color: #ffeb3b; text-align: center; padding: 20px 10px; margin: 0 0 15px 0; font-size: 18px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .container { padding: 10px; }
+        .card { background: white; border-radius: 12px; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 15px; border: 1px solid #ddd; overflow: hidden; }
+        h2 { font-size: 16px; margin: -15px -15px 15px -15px; padding: 12px 15px; color: #fff; background: #455a64; }
+        .subheader { font-weight: bold; margin-top: 15px; font-size: 13px; padding: 5px; border-radius: 4px; }
         .subheader.bad { color: #d9534f; background: #fff1f0; }
         .subheader.good { color: #007bff; background: #e0f0ff; }
-        label { display: block; font-size: 12px; font-weight: bold; margin-top: 10px; color: #666; }
+        label { display: block; font-size: 11px; font-weight: bold; margin-top: 8px; color: #666; }
         .input-group { display: flex; gap: 5px; margin-top: 3px; margin-bottom: 5px; }
-        select { width: 100%; height: 35px; font-size: 14px; border: 1px solid #ccc; border-radius: 5px; min-width: 0; }
+        select { width: 100%; height: 35px; font-size: 14px; border: 1px solid #ccc; border-radius: 5px; background-color: #fff; }
         .input-group select.has-free { flex: 1.2; }
         .input-group input { flex: 1; height: 31px; font-size: 14px; border: 1px solid #007bff; border-radius: 5px; padding-left: 5px; min-width: 0; }
-        .result-area { margin-top: 15px; padding: 10px; border-radius: 8px; font-size: 15px; border: 2px solid #007bff; background: #fff; line-height: 1.5; min-height: 100px; white-space: pre-wrap; word-wrap: break-word; }
+        .result-area { margin-top: 15px; padding: 12px; border-radius: 8px; font-size: 15px; border: 2px solid #007bff; background: #fff; line-height: 1.6; min-height: 80px; white-space: pre-wrap; word-wrap: break-word; }
         .result-area.error { border-color: #d9534f; background: #fff1f0; color: #d9534f; font-weight: bold; }
-        .copy-btn { width: 100%; background: #28a745; color: white; border: none; padding: 15px; border-radius: 8px; font-size: 18px; font-weight: bold; margin-top: 10px; cursor: pointer; }
+        .btn-container { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; padding: 0 10px; }
+        .copy-btn { width: 100%; background: #28a745; color: white; border: none; padding: 15px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
+        .add-btn { width: 100%; background: #6c757d; color: white; border: none; padding: 10px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h2>固定式燃焼器接続不備周知文章生成ツール</h2>
+<div class="main-title">固定式燃焼器接続不備周知文章生成ツール</div>
 
-    <label>対象の燃焼器</label>
-    <div class="input-group">
-        <select id="device" oninput="generate()" class="has-free">
-            <option value="">（未選択）</option>
-            <option value="固定式コンロ">固定式コンロ</option>
-            <option value="屋外式給湯器">屋外式給湯器</option>
-            <option value="屋外式風呂釜">屋外式風呂釜</option>
-            <option value="小型湯沸器">小型湯沸器</option>
-            <option value="ＢＦ式風呂釜">ＢＦ式風呂釜</option>
-            <option value="ＣＦ式風呂釜">ＣＦ式風呂釜</option>
-            <option value="ＦＥ式風呂釜">ＦＥ式風呂釜</option>
-            <option value="ＦＦ式風呂釜">ＦＦ式風呂釜</option>
-        </select>
-        <input type="text" id="device_free" placeholder="フリーワード" oninput="generate()">
-    </div>
+<div class="container">
+    <div id="app">
+        <!-- 燃焼器1 -->
+        <div class="card" id="form_1">
+            <h2>燃焼器 1</h2>
+            <label>対象の燃焼器</label>
+            <div class="input-group">
+                <select id="device_1" oninput="generate()" class="has-free">
+                    <option value="">（未選択）</option>
+                    <option value="固定式コンロ">固定式コンロ</option>
+                    <option value="屋外式給湯器">屋外式給湯器</option>
+                    <option value="屋外式風呂釜">屋外式風呂釜</option>
+                    <option value="小型湯沸器">小型湯沸器</option>
+                    <option value="ＢＦ式風呂釜">ＢＦ式風呂釜</option>
+                    <option value="ＣＦ式風呂釜">ＣＦ式風呂釜</option>
+                    <option value="ＦＥ式風呂釜">ＦＥ式風呂釜</option>
+                    <option value="ＦＦ式風呂釜">ＦＦ式風呂釜</option>
+                </select>
+                <input type="text" id="device_free_1" placeholder="フリーワード" oninput="generate()">
+            </div>
+            <div class="subheader bad">現場の接続（不備）</div>
+            <label>末端ガス栓</label>
+            <div class="input-group">
+                <select id="bad_v_1" oninput="generate()" class="has-free">
+                    <option value="">（未選択）</option>
+                    <option value="ねじガス栓">ねじガス栓</option>
+                    <option value="可とう管ガス栓">可とう管ガス栓</option>
+                    <option value="機器接続ガス栓">機器接続ガス栓</option>
+                    <option value="ヒューズガス栓">ヒューズガス栓</option>
+                </select>
+                <input type="text" id="bad_v_free_1" placeholder="フリーワード" oninput="generate()">
+            </div>
+            <label>接続管1</label>
+            <div class="input-group"><select id="bad_c1_1" oninput="generate()" class="has-free"><option value="">（未選択）</option><option value="金属フレキシブルホース">金属フレキシブルホース</option><option value="強化ガスホース">強化ガスホース</option><option value="配管用フレキ管">配管用フレキ管</option><option value="金属管">金属管</option><option value="ゴムホース">ゴムホース</option></select><input type="text" id="bad_c1_free_1" placeholder="フリーワード" oninput="generate()"></div>
+            <label>接続管2（任意）</label>
+            <div class="input-group"><select id="bad_c2_1" oninput="generate()" class="has-free"><option value="">（未選択）</option><option value="金属フレキシブルホース">金属フレキシブルホース</option><option value="強化ガスホース">強化ガスホース</option><option value="配管用フレキ管">配管用フレキ管</option><option value="金属管">金属管</option><option value="ゴムホース">ゴムホース</option></select><input type="text" id="bad_c2_free_1" placeholder="フリーワード" oninput="generate()"></div>
+            <label>接続管3（任意）</label>
+            <div class="input-group"><select id="bad_c3_1" oninput="generate()" class="has-free"><option value="">（未選択）</option><option value="金属フレキシブルホース">金属フレキシブルホース</option><option value="強化ガスホース">強化ガスホース</option><option value="配管用フレキ管">配管用フレキ管</option><option value="金属管">金属管</option><option value="ゴムホース">ゴムホース</option></select><input type="text" id="bad_c3_free_1" placeholder="フリーワード" oninput="generate()"></div>
+            <div class="subheader good">正しい接続</div>
+            <label>末端ガス栓</label>
+            <div class="input-group"><select id="good_v_1" oninput="generate()"><option value="">（未選択）</option><option value="可とう管ガス栓">可とう管ガス栓</option><option value="機器接続ガス栓">機器接続ガス栓</option><option value="ねじガス栓">ねじガス栓</option></select></div>
+            <label>接続管</label>
+            <div class="input-group"><select id="good_c1_1" oninput="generate()"><option value="">（未選択）</option><option value="金属フレキシブルホース">金属フレキシブルホース</option><option value="強化ガスホース">強化ガスホース</option><option value="配管用フレキ管">配管用フレキ管</option><option value="金属管">金属管</option></select></div>
+        </div>
 
-    <div class="subheader bad">現場の接続（不備）</div>
-    <label>末端ガス栓</label>
-    <div class="input-group">
-        <select id="bad_v" oninput="generate()" class="has-free">
-            <option value="">（未選択）</option>
-            <option value="ねじガス栓">ねじガス栓</option>
-            <option value="可とう管ガス栓">可とう管ガス栓</option>
-            <option value="機器接続ガス栓">機器接続ガス栓</option>
-            <option value="ヒューズガス栓">ヒューズガス栓</option>
-        </select>
-        <input type="text" id="bad_v_free" placeholder="フリーワード" oninput="generate()">
-    </div>
-    <label>接続管1</label>
-    <div class="input-group">
-        <select id="bad_c1" oninput="generate()" class="has-free">
-            <option value="">（未選択）</option>
-            <option value="金属フレキシブルホース">金属フレキシブルホース</option>
-            <option value="強化ガスホース">強化ガスホース</option>
-            <option value="配管用フレキ管">配管用フレキ管</option>
-            <option value="金属管">金属管</option>
-            <option value="ゴムホース">ゴムホース</option>
-        </select>
-        <input type="text" id="bad_c1_free" placeholder="フリーワード" oninput="generate()">
-    </div>
-    <label>接続管2（任意）</label>
-    <div class="input-group">
-        <select id="bad_c2" oninput="generate()" class="has-free">
-            <option value="">（未選択）</option>
-            <option value="金属フレキシブルホース">金属フレキシブルホース</option>
-            <option value="強化ガスホース">強化ガスホース</option>
-            <option value="配管用フレキ管">配管用フレキ管</option>
-            <option value="金属管">金属管</option>
-            <option value="ゴムホース">ゴムホース</option>
-        </select>
-        <input type="text" id="bad_c2_free" placeholder="フリーワード" oninput="generate()">
-    </div>
-    <label>接続管3（任意）</label>
-    <div class="input-group">
-        <select id="bad_c3" oninput="generate()" class="has-free">
-            <option value="">（未選択）</option>
-            <option value="金属フレキシブルホース">金属フレキシブルホース</option>
-            <option value="強化ガスホース">強化ガスホース</option>
-            <option value="配管用フレキ管">配管用フレキ管</option>
-            <option value="金属管">金属管</option>
-            <option value="ゴムホース">ゴムホース</option>
-        </select>
-        <input type="text" id="bad_c3_free" placeholder="フリーワード" oninput="generate()">
-    </div>
+        <!-- 燃焼器2 -->
+        <div id="form_2" class="card hidden">
+            <h2>燃焼器 2</h2>
+            <label>対象の燃焼器</label>
+            <div class="input-group"><select id="device_2" oninput="generate()" class="has-free"><option value="">（未選択）</option><option value="固定式コンロ">固定式コンロ</option><option value="屋外式給湯器">屋外式給湯器</option><option value="屋外式風呂釜">屋外式風呂釜</option><option value="小型湯沸器">小型湯沸器</option><option value="ＢＦ式風呂釜">ＢＦ式風呂釜</option><option value="ＣＦ式風呂釜">ＣＦ式風呂釜</option><option value="ＦＥ式風呂釜">ＦＥ式風呂釜</option><option value="ＦＦ式風呂釜">ＦＦ式風呂釜</option></select><input type="text" id="device_free_2" placeholder="フリーワード" oninput="generate()"></div>
+            <div class="subheader bad">現場の接続（不備）</div>
+            <label>末端ガス栓</label>
+            <div class="input-group"><select id="bad_v_2" oninput="generate()" class="has-free"><option value="">（未選択）</option><option value="ねじガス栓">ねじガス栓</option><option value="可とう管ガス栓">可とう管ガス栓</option><option value="機器接続ガス栓">機器接続ガス栓</option><option value="ヒューズガス栓">ヒューズガス栓</option></select><input type="text" id="bad_v_free_2" placeholder="フリーワード" oninput="generate()"></div>
+            <label>接続管1</label>
+            <div class="input-group"><select id="bad_c1_2" oninput="generate()" class="has-free"><option value="">（未選択）</option><option value="金属フレキシブルホース">金属フレキシブルホース</option><option value="強化ガスホース">強化ガスホース</option><option value="配管用フレキ管">配管用フレキ管</option><option value="金属管">金属管</option><option value="ゴムホース">ゴムホース</option></select><input type="text" id="bad_c1_free_2" placeholder="フリーワード" oninput="generate()"></div>
+            <label>接続管2（任意）</label>
+            <div class="input-group"><select id="bad_c2_2" oninput="generate()" class="has-free"><option value="">（未選択）</option><option value="金属フレキシブルホース">金属フレキシブルホース</option><option value="強化ガスホース">強化ガスホース</option><option value="配管用フレキ管">配管用フレキ管</option><option value="金属管">金属管</option><option value="ゴムホース">ゴムホース</option></select><input type="text" id="bad_c2_free_2" placeholder="フリーワード" oninput="generate()"></div>
+            <label>接続管3（任意）</label>
+            <div class="input-group"><select id="bad_c3_2" oninput="generate()" class="has-free"><option value="">（未選択）</option><option value="金属フレキシブルホース">金属フレキシブルホース</option><option value="強化ガスホース">強化ガスホース</option><option value="配管用フレキ管">配管用フレキ管</option><option value="金属管">金属管</option><option value="ゴムホース">ゴムホース</option></select><input type="text" id="bad_c3_free_2" placeholder="フリーワード" oninput="generate()"></div>
+            <div class="subheader good">正しい接続</div>
+            <label>末端ガス栓</label>
+            <div class="input-group"><select id="good_v_2" oninput="generate()"><option value="">（未選択）</option><option value="可とう管ガス栓">可とう管ガス栓</option><option value="機器接続ガス栓">機器接続ガス栓</option><option value="ねじガス栓">ねじガス栓</option></select></div>
+            <label>接続管</label>
+            <div class="input-group"><select id="good_c1_2" oninput="generate()"><option value="">（未選択）</option><option value="金属フレキシブルホース">金属フレキシブルホース</option><option value="強化ガスホース">強化ガスホース</option><option value="配管用フレキ管">配管用フレキ管</option><option value="金属管">金属管</option></select></div>
+        </div>
 
-    <div class="subheader good">正しい接続</div>
-    <label>末端ガス栓</label>
-    <div class="input-group">
-        <select id="good_v" oninput="generate()">
-            <option value="">（未選択）</option>
-            <option value="可とう管ガス栓">可とう管ガス栓</option>
-            <option value="機器接続ガス栓">機器接続ガス栓</option>
-            <option value="ねじガス栓">ねじガス栓</option>
-        </select>
+        <div class="btn-container">
+            <button id="add_btn" class="add-btn" onclick="toggleForm2()">＋ 2つ目の燃焼器を追加</button>
+            <div id="resultText" class="result-area"></div>
+            <button class="copy-btn" onclick="copyToClipboard()">文章をコピー</button>
+        </div>
     </div>
-    <label>接続管</label>
-    <div class="input-group">
-        <select id="good_c1" oninput="generate()">
-            <option value="">（未選択）</option>
-            <option value="金属フレキシブルホース">金属フレキシブルホース</option>
-            <option value="強化ガスホース">強化ガスホース</option>
-            <option value="配管用フレキ管">配管用フレキ管</option>
-            <option value="金属管">金属管</option>
-        </select>
-    </div>
-
-    <div id="resultText" class="result-area"></div>
-
-    <button class="copy-btn" onclick="copyToClipboard()">文章をコピー</button>
 </div>
 
 <script>
 let hasError = false;
+let isForm2Visible = false;
+
+function toggleForm2() {
+    isForm2Visible = !isForm2Visible;
+    const f2 = document.getElementById('form_2');
+    const btn = document.getElementById('add_btn');
+    if (isForm2Visible) {
+        f2.classList.remove('hidden');
+        btn.innerText = "− 2つ目の燃焼器を削除";
+    } else {
+        f2.classList.add('hidden');
+        btn.innerText = "＋ 2つ目の燃焼器を追加";
+    }
+    generate();
+}
 
 function getValue(selectId, freeId) {
     const freeVal = document.getElementById(freeId).value.trim();
     return freeVal !== "" ? freeVal : document.getElementById(selectId).value;
 }
 
-// 厳格な組み合わせ判定
 function isCorrectConnection(valve, p1, p2, p3) {
     if (valve === "") return false;
     const pipes = [p1, p2, p3].filter(p => p !== "");
-
-    // 1. 機器接続ガス栓：管が0本なら正しい
-    if (valve === "機器接続ガス栓") {
-        return pipes.length === 0;
-    }
-
-    // 2. 可とう管ガス栓：管が1本かつ指定の種類なら正しい
+    if (valve === "機器接続ガス栓") return pipes.length === 0;
     if (valve === "可とう管ガス栓") {
         if (pipes.length !== 1) return false;
         return (p1 === "金属フレキシブルホース" || p1 === "強化ガスホース");
     }
-
-    // 3. ねじガス栓：管が1本以上あり、すべて指定の種類なら正しい
     if (valve === "ねじガス栓") {
         if (pipes.length === 0) return false; 
         return pipes.every(p => p === "配管用フレキ管" || p === "金属管");
     }
-
-    // ヒューズガス栓などは常に不正
     return false;
+}
+
+function getSentence(num) {
+    const device = getValue('device_' + num, 'device_free_' + num);
+    if (!device) return { text: "", error: false, empty: true };
+
+    const bv = getValue('bad_v_' + num, 'bad_v_free_' + num);
+    const bc1 = getValue('bad_c1_' + num, 'bad_c1_free_' + num);
+    const bc2 = getValue('bad_c2_' + num, 'bad_c2_free_' + num);
+    const bc3 = getValue('bad_c3_' + num, 'bad_c3_free_' + num);
+    const gv = document.getElementById('good_v_' + num).value;
+    const gc1 = document.getElementById('good_c1_' + num).value;
+
+    if (bv !== "" && isCorrectConnection(bv, bc1, bc2, bc3)) {
+        return { text: `エラー：燃焼器${num}の現場接続は正しい組み合わせです。`, error: true };
+    }
+    if (gv !== "" && !isCorrectConnection(gv, gc1, "", "")) {
+        return { text: `エラー：燃焼器${num}の改善案が正しくありません。`, error: true };
+    }
+    const isGoodReady = (gv === "機器接続ガス栓") || (gv !== "" && gc1 !== "");
+    if (!bv || !isGoodReady) {
+        return { text: `燃焼器${num}の項目を選択してください。`, error: false, empty: true };
+    }
+
+    let bad_path = [bv, bc1, bc2, bc3].filter(v => v !== "").join("→");
+    let good_path = [gv, gc1].filter(v => v !== "").join("→");
+    
+    // 「、」を削除し、隙間をなくした形式
+    return { 
+        text: `${device}へのガス接続が【${bad_path}】となっています。【${good_path}】へ改善をお願いいたします。`,
+        error: false, 
+        empty: false 
+    };
 }
 
 function generate() {
     const resultDiv = document.getElementById('resultText');
-    try {
-        const device = getValue('device', 'device_free');
-        if (!device) {
-            resultDiv.innerText = "ここに文章が生成されます。";
+    const res1 = getSentence(1);
+    
+    if (res1.error) {
+        resultDiv.innerText = res1.text;
+        resultDiv.classList.add('error');
+        hasError = true;
+        return;
+    }
+
+    if (!isForm2Visible) {
+        if (res1.empty) {
+            resultDiv.innerText = "項目を選択してください。";
+            resultDiv.classList.remove('error');
+            hasError = true;
+        } else {
+            resultDiv.innerText = res1.text;
             resultDiv.classList.remove('error');
             hasError = false;
-            return;
         }
-
-        const bv = getValue('bad_v', 'bad_v_free');
-        const bc1 = getValue('bad_c1', 'bad_c1_free');
-        const bc2 = getValue('bad_c2', 'bad_c2_free');
-        const bc3 = getValue('bad_c3', 'bad_c3_free');
-
-        const gv = document.getElementById('good_v').value;
-        const gc1 = document.getElementById('good_c1').value;
-
-        // ★現場側が正しい組み合わせかチェック（ガス栓が選択されている場合）
-        if (bv !== "" && isCorrectConnection(bv, bc1, bc2, bc3)) {
-            resultDiv.innerText = `エラー：現場の接続状況「${bv}...」は法令等に基づいた正しい組み合わせになっています。周知文章は不要です。`;
+    } else {
+        const res2 = getSentence(2);
+        if (res2.error) {
+            resultDiv.innerText = res2.text;
             resultDiv.classList.add('error');
             hasError = true;
             return;
         }
-
-        // 改善側チェック
-        if (gv !== "") {
-            if (!isCorrectConnection(gv, gc1, "", "")) {
-                resultDiv.innerText = `エラー：選択された「正しい接続」の組み合わせが正しくありません。`;
-                resultDiv.classList.add('error');
-                hasError = true;
-                return;
-            }
-        }
-
-        // 必須入力チェック（現場側はガス栓さえあればOK、改善側は完成形が必要）
-        const isBadReady = (bv !== "");
-        const isGoodReady = (gv === "機器接続ガス栓") || (gv !== "" && gc1 !== "");
-
-        if (!isBadReady || !isGoodReady) {
-            resultDiv.innerText = "「現場の不備」と「正しい接続」を選択してください。";
+        if (res1.empty || res2.empty) {
+            resultDiv.innerText = "すべての燃焼器の項目を選択してください。";
             resultDiv.classList.remove('error');
             hasError = true;
-            return;
+        } else {
+            // 改行せず①と②を繋げて表示
+            resultDiv.innerText = `①${res1.text}②${res2.text}`;
+            resultDiv.classList.remove('error');
+            hasError = false;
         }
-
-        let bad_path = [bv, bc1, bc2, bc3].filter(v => v !== "").join("→");
-        let good_path = [gv, gc1].filter(v => v !== "").join("→");
-
-        resultDiv.innerText = `${device}へのガス接続が、【${bad_path}】となっています。【${good_path}】へ改善をお願いいたします。`;
-        resultDiv.classList.remove('error');
-        hasError = false;
-
-    } catch (e) {
-        resultDiv.innerText = "エラーが発生しました。";
-        hasError = true;
     }
 }
 
