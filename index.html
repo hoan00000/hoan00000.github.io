@@ -18,11 +18,8 @@
         select { width: 100%; height: 35px; font-size: 14px; border: 1px solid #ccc; border-radius: 5px; background-color: #fff; }
         .input-group select.has-free { flex: 1.2; }
         .input-group input { flex: 1; height: 31px; font-size: 14px; border: 1px solid #007bff; border-radius: 5px; padding-left: 5px; min-width: 0; }
-        
-        /* white-spaceをnormalに変更し、システム的な改行を無視するように修正 */
         .result-area { margin-top: 15px; padding: 12px; border-radius: 8px; font-size: 15px; border: 2px solid #007bff; background: #fff; line-height: 1.6; min-height: 80px; white-space: normal; word-wrap: break-word; }
         .result-area.error { border-color: #d9534f; background: #fff1f0; color: #d9534f; font-weight: bold; }
-        
         .btn-container { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; padding: 0 10px; }
         .copy-btn { width: 100%; background: #28a745; color: white; border: none; padding: 15px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
         .add-btn { width: 100%; background: #6c757d; color: white; border: none; padding: 10px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; }
@@ -61,6 +58,8 @@
                     <option value="ねじガス栓">ねじガス栓</option>
                     <option value="可とう管ガス栓">可とう管ガス栓</option>
                     <option value="機器接続ガス栓">機器接続ガス栓</option>
+                    <option value="フレキ＆ヒューズガス栓（フレキ側）">フレキ＆ヒューズガス栓（フレキ側）</option>
+                    <option value="フレキ＆ヒューズガス栓（ヒューズ側）">フレキ＆ヒューズガス栓（ヒューズ側）</option>
                     <option value="ヒューズガス栓">ヒューズガス栓</option>
                 </select>
                 <input type="text" id="bad_v_free_1" placeholder="フリーワード" oninput="generate()">
@@ -73,7 +72,7 @@
             <div class="input-group"><select id="bad_c3_1" oninput="generate()" class="has-free"><option value="">（未選択）</option><option value="金属フレキシブルホース">金属フレキシブルホース</option><option value="強化ガスホース">強化ガスホース</option><option value="配管用フレキ管">配管用フレキ管</option><option value="金属管">金属管</option><option value="ゴムホース">ゴムホース</option></select><input type="text" id="bad_c3_free_1" placeholder="フリーワード" oninput="generate()"></div>
             <div class="subheader good">正しい接続</div>
             <label>末端ガス栓</label>
-            <div class="input-group"><select id="good_v_1" oninput="generate()"><option value="">（未選択）</option><option value="可とう管ガス栓">可とう管ガス栓</option><option value="機器接続ガス栓">機器接続ガス栓</option><option value="ねじガス栓">ねじガス栓</option></select></div>
+            <div class="input-group"><select id="good_v_1" oninput="generate()"><option value="">（未選択）</option><option value="可とう管ガス栓">可とう管ガス栓</option><option value="機器接続ガス栓">機器接続ガス栓</option><option value="ねじガス栓">ねじガス栓</option><option value="フレキ＆ヒューズガス栓（フレキ側）">フレキ＆ヒューズガス栓（フレキ側）</option></select></div>
             <label>接続管</label>
             <div class="input-group"><select id="good_c1_1" oninput="generate()"><option value="">（未選択）</option><option value="金属フレキシブルホース">金属フレキシブルホース</option><option value="強化ガスホース">強化ガスホース</option><option value="配管用フレキ管">配管用フレキ管</option><option value="金属管">金属管</option></select></div>
         </div>
@@ -85,7 +84,15 @@
             <div class="input-group"><select id="device_2" oninput="generate()" class="has-free"><option value="">（未選択）</option><option value="固定式コンロ">固定式コンロ</option><option value="屋外式給湯器">屋外式給湯器</option><option value="屋外式風呂釜">屋外式風呂釜</option><option value="小型湯沸器">小型湯沸器</option><option value="ＢＦ式風呂釜">ＢＦ式風呂釜</option><option value="ＣＦ式風呂釜">ＣＦ式風呂釜</option><option value="ＦＥ式風呂釜">ＦＥ式風呂釜</option><option value="ＦＦ式風呂釜">ＦＦ式風呂釜</option></select><input type="text" id="device_free_2" placeholder="フリーワード" oninput="generate()"></div>
             <div class="subheader bad">現場の接続（不備）</div>
             <label>末端ガス栓</label>
-            <div class="input-group"><select id="bad_v_2" oninput="generate()" class="has-free"><option value="">（未選択）</option><option value="ねじガス栓">ねじガス栓</option><option value="可とう管ガス栓">可とう管ガス栓</option><option value="機器接続ガス栓">機器接続ガス栓</option><option value="ヒューズガス栓">ヒューズガス栓</option></select><input type="text" id="bad_v_free_2" placeholder="フリーワード" oninput="generate()"></div>
+            <div class="input-group"><select id="bad_v_2" oninput="generate()" class="has-free">
+                <option value="">（未選択）</option>
+                <option value="ねじガス栓">ねじガス栓</option>
+                <option value="可とう管ガス栓">可とう管ガス栓</option>
+                <option value="機器接続ガス栓">機器接続ガス栓</option>
+                <option value="フレキ＆ヒューズガス栓（フレキ側）">フレキ＆ヒューズガス栓（フレキ側）</option>
+                <option value="フレキ＆ヒューズガス栓（ヒューズ側）">フレキ＆ヒューズガス栓（ヒューズ側）</option>
+                <option value="ヒューズガス栓">ヒューズガス栓</option>
+            </select><input type="text" id="bad_v_free_2" placeholder="フリーワード" oninput="generate()"></div>
             <label>接続管1</label>
             <div class="input-group"><select id="bad_c1_2" oninput="generate()" class="has-free"><option value="">（未選択）</option><option value="金属フレキシブルホース">金属フレキシブルホース</option><option value="強化ガスホース">強化ガスホース</option><option value="配管用フレキ管">配管用フレキ管</option><option value="金属管">金属管</option><option value="ゴムホース">ゴムホース</option></select><input type="text" id="bad_c1_free_2" placeholder="フリーワード" oninput="generate()"></div>
             <label>接続管2（任意）</label>
@@ -94,7 +101,7 @@
             <div class="input-group"><select id="bad_c3_2" oninput="generate()" class="has-free"><option value="">（未選択）</option><option value="金属フレキシブルホース">金属フレキシブルホース</option><option value="強化ガスホース">強化ガスホース</option><option value="配管用フレキ管">配管用フレキ管</option><option value="金属管">金属管</option><option value="ゴムホース">ゴムホース</option></select><input type="text" id="bad_c3_free_2" placeholder="フリーワード" oninput="generate()"></div>
             <div class="subheader good">正しい接続</div>
             <label>末端ガス栓</label>
-            <div class="input-group"><select id="good_v_2" oninput="generate()"><option value="">（未選択）</option><option value="可とう管ガス栓">可とう管ガス栓</option><option value="機器接続ガス栓">機器接続ガス栓</option><option value="ねじガス栓">ねじガス栓</option></select></div>
+            <div class="input-group"><select id="good_v_2" oninput="generate()"><option value="">（未選択）</option><option value="可とう管ガス栓">可とう管ガス栓</option><option value="機器接続ガス栓">機器接続ガス栓</option><option value="ねじガス栓">ねじガス栓</option><option value="フレキ＆ヒューズガス栓（フレキ側）">フレキ＆ヒューズガス栓（フレキ側）</option></select></div>
             <label>接続管</label>
             <div class="input-group"><select id="good_c1_2" oninput="generate()"><option value="">（未選択）</option><option value="金属フレキシブルホース">金属フレキシブルホース</option><option value="強化ガスホース">強化ガスホース</option><option value="配管用フレキ管">配管用フレキ管</option><option value="金属管">金属管</option></select></div>
         </div>
@@ -134,14 +141,17 @@ function isCorrectConnection(valve, p1, p2, p3) {
     if (valve === "") return false;
     const pipes = [p1, p2, p3].filter(p => p !== "");
     if (valve === "機器接続ガス栓") return pipes.length === 0;
-    if (valve === "可とう管ガス栓") {
+    
+    if (valve === "可とう管ガス栓" || valve === "フレキ＆ヒューズガス栓（フレキ側）") {
         if (pipes.length !== 1) return false;
         return (p1 === "金属フレキシブルホース" || p1 === "強化ガスホース");
     }
+    
     if (valve === "ねじガス栓") {
         if (pipes.length === 0) return false; 
         return pipes.every(p => p === "配管用フレキ管" || p === "金属管");
     }
+    
     return false;
 }
 
@@ -170,7 +180,6 @@ function getSentence(num) {
     let bad_path = [bv, bc1, bc2, bc3].filter(v => v !== "").join("→");
     let good_path = [gv, gc1].filter(v => v !== "").join("→");
     
-    // JSのテンプレートリテラル内の改行も排除
     return { 
         text: device + "へのガス接続が【" + bad_path + "】となっています。【" + good_path + "】へ改善をお願いいたします。",
         error: false, 
@@ -212,7 +221,6 @@ function generate() {
             resultDiv.classList.remove('error');
             hasError = true;
         } else {
-            // 文字列を完全に密着させて結合
             resultDiv.innerText = "①" + res1.text + "②" + res2.text;
             resultDiv.classList.remove('error');
             hasError = false;
